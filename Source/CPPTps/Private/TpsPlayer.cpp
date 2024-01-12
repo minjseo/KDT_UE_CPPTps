@@ -391,7 +391,7 @@ void ATpsPlayer::EnhancedRealFire()
 				{
 					AActor* hitActor = hitInfo.GetActor();
 					AEnemy* enemy = Cast<AEnemy>(hitActor);
-					enemy->fsm->ChangeState(EEnemyState::DAMAGE);
+					enemy->DamageProcess(1);
 				}
 			}
 		}

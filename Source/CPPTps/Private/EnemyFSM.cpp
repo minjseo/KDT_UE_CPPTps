@@ -62,6 +62,16 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 void UEnemyFSM::ChangeState(EEnemyState s)
 {
+	//바뀌는 상태를 출력하자
+	UEnum* enumptr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EEnemyState"), true);
+	if (enumptr != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s -----> %s"), 
+		*enumptr->GetNameStringByIndex((int32)currState),
+		*enumptr->GetNameStringByIndex((int32)s));
+	}
+
+
 	// 현재 상태를 갱신
 	currState = s;
 	
@@ -79,6 +89,9 @@ void UEnemyFSM::ChangeState(EEnemyState s)
 	case EEnemyState::ATTACK:
 		// 바로 공격 가능하게 현재시간을 attackDelayTime 으로 설정
 		currTime = attackDelayTime;
+		break;
+	case EEnemyState::DIE:
+		myActor->Destroy();
 		break;
 	default:
 		break;

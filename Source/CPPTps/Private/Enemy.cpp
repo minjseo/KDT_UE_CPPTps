@@ -42,6 +42,9 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//현재 HP를 maxHP로 하자 
+	currHP = maxHP;
 	
 }
 
@@ -58,5 +61,23 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemy::DamageProcess(int32 damage)
+{
+	//hp를 줄이자
+	currHP -= damage;
+	//만약에 hp가 0보다 크면
+	if (currHP > 0)
+	{
+		fsm->ChangeState(EEnemyState::DAMAGE);
+	}
+	//damage 상태로 전환 
+	//그렇지 않으면 (hp가 0)
+	else
+	{
+		//DIE 상태로 전환 
+		fsm->ChangeState(EEnemyState::DIE);
+	}
 }
 
