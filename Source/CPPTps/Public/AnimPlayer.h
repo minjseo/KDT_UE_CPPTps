@@ -18,8 +18,18 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	
 public:
-	// 플레이동 속력
+	
+	// 앞, 뒤 판별 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float moveSpeed = 0;
+	float dirF = 0;
+
+	// 좌, 우 판별 변수
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float dirR = 0;
+
+	//공중에 떠 있는지 여부 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool isAir = false;
+
 
 };
