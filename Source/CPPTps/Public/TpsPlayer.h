@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Inventory.h"
 #include "TpsPlayer.generated.h"
 
 UENUM(BlueprintType)
@@ -49,6 +50,12 @@ public:
 
 	float runSpeed = 500;
 	float walkSpeed = 500;
+
+	//최대 HP
+	float maxHP = 100;
+	//현재 HP
+	float currHP;
+
 
 	// 선택한 무기 (1 : 라이플, 2 : 스나이퍼)
 	EWeaponType currWeaponMode = EWeaponType::GUN;
@@ -108,10 +115,22 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* fireMontage;
 
+	//MainWidget BP 클래스 담을 변수 
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<class UMainWidget> mainWidgetFactory;
+
+	//생성한/붙인 MainWidget 담을 변수
+	UPROPERTY()
+	class UMainWidget* mainWidget;
+
 	// 걷기 / 뛰기
 	bool isRun = false;
 
+
 public:
+
+
+	void DamageProcess(float damage);
 
 	void MoveAction(FVector2d keyboardInput);
 	void RotateAction();

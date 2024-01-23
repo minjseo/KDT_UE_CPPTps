@@ -21,6 +21,7 @@
 #include "InvenWidget.h"
 #include "InvenItem.h"
 #include <Components/CapsuleComponent.h>
+#include "MainWidget.h"
 
 
 
@@ -139,9 +140,20 @@ ATpsPlayer::ATpsPlayer()
 	}
 
 
+
+	//MainWidget 블루프린트 가져오자 
+	ConstructorHelpers::FClassFinder<UMainWidget> tempMain(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/BP_MainWidget.BP_MainWidget_C'"));
+	if (tempMain.Succeeded())
+	{
+		mainWidgetFactory = tempMain.Class;
+	}
+
+
 	// collision preset 을 PlayerProfile 로 설정
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerProfile"));
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
+
+
 
 
 //-------------------------------------------
@@ -189,8 +201,12 @@ void ATpsPlayer::BeginPlay()
 	// 인벤토리 Widget 생성
 	inven = CreateWidget<UInvenWidget>(GetWorld(), invenFactory);
 
+	//현재 HP를 MAX HP로 하자
+	currHP = maxHP;
 
-
+	//Mainwidget 생성 후 화면에 붙이자
+	mainWidget = CreateWidget<UMainWidget>(GetWorld(), mainWidgetFactory);
+	mainWidget->AddToViewport();
  }
 
 // Called every frame
@@ -243,6 +259,21 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void ATpsPlayer::DamageProcess(float damage)
+{
+	currHP -= damage;
+	//UE_LOG(LogTemp, Warning, )
+
+	mainWidget->UpdateHP(currHP, maxHP);
+
+	if (currHP <= 0)
+	{
+		//Game Over 처리
+	}
+	
+
+}
+
 void ATpsPlayer::MoveAction(FVector2d keyboardInput)
 {
 	//// p = p0 + vt
@@ -285,6 +316,7 @@ void ATpsPlayer::ChangeWeapon(EWeaponType weaponIdx)
 	case EWeaponType::GUN:
 		// Gun 을 보이게 하고, Sniper 를 보이지 않게
 		gun->SetVisibility(true);
+		sniper->SetVisibility(false);
 		sniper->SetVisibility(false);
 		// 만약에 Sniper UI 가 화면에 있다면
 		if (sniperUI->IsInViewport())
@@ -579,6 +611,8 @@ void ATpsPlayer::InputLMouseClick()
 	if(onHoverItem == nullptr) return;
 	onHoverItem->BeginMove();
 }
+
+
 
 void ATpsPlayer::InputSort()
 {
