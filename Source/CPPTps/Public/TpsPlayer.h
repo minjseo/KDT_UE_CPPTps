@@ -166,8 +166,15 @@ public:
 	UPROPERTY()
 	class UInvenItem* onHoverItem = nullptr;
 
+	//UPROPERTY(EditAnywhere)
+	//TSubclassOf<class AItemCube> itemCubeFactory;
+
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<class AItemObject>> itemObjectFactory;
+
 public:
 	void InputGetItem(const struct FInputActionValue& value);
+	void GetItem(EItemType type);
 	void InputOnOffInventory();
 
 	UFUNCTION()

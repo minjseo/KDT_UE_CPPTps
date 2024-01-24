@@ -101,7 +101,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 void UEnemyFSM::ChangeState(EEnemyState s)
 {
 	// 바뀌는 상태를 출력하자
-	UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EEnemyState"), true);
+	UEnum* enumPtr = FindObject<UEnum>(nullptr, TEXT("/Script/CoreUObject.Class'/Script/CPPTps.EnemyFSM.EEnemyState'"), true);
 	if (enumPtr != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s -------> %s"),
